@@ -1,0 +1,257 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+body {
+  background: var(--bg-primary);
+  -webkit-transition: background 0.2s;
+  transition: background 0.2s;
+  min-height: 100vh;
+}
+
+canvas {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+main {
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+  padding: 30px 20px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  z-index: 2;
+}
+
+.win-wrapper {
+  height: 100vh;
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.win-wrapper span {
+  color: var(--bg-contrast);
+  font-size: 5em;
+}
+
+.win-wrapper button {
+  margin-top: 20px;
+  background: var(--bg-contrast);
+  color: var(--bg-primary);
+  border: none;
+  font-size: 2em;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  pointer-events: all;
+}
+
+.win-wrapper button:active {
+  -webkit-transform: translateY(-2px);
+          transform: translateY(-2px);
+}
+
+hangman-viewport {
+  width: 50vw;
+  max-width: 500px;
+  min-width: 250px;
+}
+
+hangman-keyboard {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  width: 100%;
+  margin: -8px;
+  margin-top: 30px;
+}
+
+hangman-keyboard .hangman-key {
+  padding: 15px;
+  margin: 8px;
+  font-size: 1.5em;
+  text-transform: capitalize;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+  background: #000;
+  color: white;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+}
+
+hangman-keyboard .hangman-key:focus {
+  -webkit-box-shadow: 0 0 0 3px #1e95da;
+          box-shadow: 0 0 0 3px #1e95da;
+}
+
+hangman-keyboard .hangman-key:not(:disabled):hover {
+  -webkit-transform: scale(1.1);
+          transform: scale(1.1);
+  cursor: pointer;
+}
+
+hangman-keyboard .hangman-key:not(:disabled):active {
+  -webkit-transform: scale(1);
+          transform: scale(1);
+}
+
+hangman-keyboard .hangman-key:disabled {
+  cursor: not-allowed;
+}
+
+hangman-word {
+  font-size: calc(40px + 50 * ((100vw - 320px) / 680));
+  color: var(--bg-contrast);
+}
+
+theme-toggle {
+  width: 48px;
+  height: 48px;
+  top: 10px;
+  right: 10px;
+  position: absolute;
+  overflow: hidden;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  opacity: 0.25;
+  cursor: pointer;
+  z-index: 9999;
+}
+
+theme-toggle .moon {
+  width: 30px;
+  z-index: 99;
+  color: #000;
+  -webkit-transition: width 0.2s;
+  transition: width 0.2s;
+}
+
+theme-toggle .moon .moon-circle {
+  -webkit-transition: -webkit-transform 0.2s;
+  transition: -webkit-transform 0.2s;
+  transition: transform 0.2s;
+  transition: transform 0.2s, -webkit-transform 0.2s;
+}
+
+theme-toggle.dark .moon {
+  width: 20px;
+  color: #fff;
+}
+
+theme-toggle.dark .moon-circle {
+  -webkit-transform: translate(10px);
+          transform: translate(10px);
+}
+
+theme-toggle:hover, theme-toggle:focus {
+  opacity: 1;
+}
+
+theme-toggle div {
+  position: absolute;
+  background: #f5f5f5;
+  -webkit-transition: background 0.2s, opacity 0.2s, -webkit-transform 0.2s;
+  transition: background 0.2s, opacity 0.2s, -webkit-transform 0.2s;
+  transition: transform 0.2s, background 0.2s, opacity 0.2s;
+  transition: transform 0.2s, background 0.2s, opacity 0.2s, -webkit-transform 0.2s;
+}
+
+theme-toggle .ray {
+  width: 6px;
+  height: 2px;
+  border-radius: 2px;
+}
+
+theme-toggle .ray.one {
+  -webkit-transform: rotate(0deg) translateX(14px);
+          transform: rotate(0deg) translateX(14px);
+}
+
+theme-toggle .ray.two {
+  -webkit-transform: rotate(45deg) translateX(14px);
+          transform: rotate(45deg) translateX(14px);
+}
+
+theme-toggle .ray.three {
+  -webkit-transform: rotate(90deg) translateX(14px);
+          transform: rotate(90deg) translateX(14px);
+}
+
+theme-toggle .ray.four {
+  -webkit-transform: rotate(135deg) translateX(14px);
+          transform: rotate(135deg) translateX(14px);
+}
+
+theme-toggle .ray.five {
+  -webkit-transform: rotate(180deg) translateX(14px);
+          transform: rotate(180deg) translateX(14px);
+}
+
+theme-toggle .ray.six {
+  -webkit-transform: rotate(225deg) translateX(14px);
+          transform: rotate(225deg) translateX(14px);
+}
+
+theme-toggle .ray.seven {
+  -webkit-transform: rotate(270deg) translateX(14px);
+          transform: rotate(270deg) translateX(14px);
+}
+
+theme-toggle .ray.eight {
+  -webkit-transform: rotate(315deg) translateX(14px);
+          transform: rotate(315deg) translateX(14px);
+}
+
+theme-toggle.light .ray {
+  -webkit-transform: scaleX(0.01);
+          transform: scaleX(0.01);
+  opacity: 0;
+}
+/*# sourceMappingURL=main.css.map */

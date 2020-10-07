@@ -1,0 +1,195 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+        sans-serif;
+}
+
+body {
+    background: var(--bg-primary);
+    transition: background 0.2s;
+    min-height: 100vh;
+}
+
+canvas {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+main {
+    position: relative;
+    height: 100vh;
+    width: 100vw;
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    z-index: 2;
+}
+
+.win-wrapper {
+    height: 100vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 4;
+    pointer-events: none;
+
+    span {
+        color: var(--bg-contrast);
+        font-size: 5em;
+    }
+
+    button {
+        margin-top: 20px;
+        background: var(--bg-contrast);
+        color: var(--bg-primary);
+        border: none;
+        font-size: 2em;
+        padding: 10px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        pointer-events: all;
+
+        &:active {
+            transform: translateY(-2px);
+        }
+    }
+}
+
+hangman-viewport {
+    width: 50vw;
+    max-width: 500px;
+    min-width: 250px;
+}
+
+hangman-keyboard {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
+    margin: -8px;
+    margin-top: 30px;
+
+    .hangman-key {
+        padding: 15px;
+        margin: 8px;
+        font-size: 1.5em;
+        text-transform: capitalize;
+        border: none;
+        border-radius: 5px;
+        outline: none;
+        background: #000;
+        color: white;
+        transition: 0.2s;
+
+        &:focus {
+            box-shadow: 0 0 0 3px rgb(30, 149, 218);
+        }
+
+        &:not(:disabled):hover {
+            transform: scale(1.1);
+            cursor: pointer;
+        }
+
+        &:not(:disabled):active {
+            transform: scale(1);
+        }
+
+        &:disabled {
+            cursor: not-allowed;
+        }
+    }
+}
+
+hangman-word {
+    font-size: calc(40px + 50 * ((100vw - 320px) / 680));
+    color: var(--bg-contrast);
+}
+
+theme-toggle {
+    width: 48px;
+    height: 48px;
+    top: 10px;
+    right: 10px;
+    position: absolute;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.25;
+    cursor: pointer;
+    z-index: 9999;
+
+    .moon {
+        width: 30px;
+        z-index: 99;
+        color: #000;
+        .moon-circle {
+            transition: transform 0.2s;
+        }
+        transition: width 0.2s;
+    }
+    &.dark {
+        .moon {
+            width: 20px;
+            color: #fff;
+        }
+        .moon-circle {
+            transform: translate(10px);
+        }
+    }
+    &:hover,
+    &:focus {
+        opacity: 1;
+    }
+    div {
+        position: absolute;
+        background: #f5f5f5;
+        transition: transform 0.2s, background 0.2s, opacity 0.2s;
+    }
+    .ray {
+        width: 6px;
+        height: 2px;
+        border-radius: 2px;
+    }
+    .ray.one {
+        transform: rotate(0deg) translateX(14px);
+    }
+    .ray.two {
+        transform: rotate(45deg) translateX(14px);
+    }
+    .ray.three {
+        transform: rotate(90deg) translateX(14px);
+    }
+    .ray.four {
+        transform: rotate(135deg) translateX(14px);
+    }
+    .ray.five {
+        transform: rotate(180deg) translateX(14px);
+    }
+    .ray.six {
+        transform: rotate(225deg) translateX(14px);
+    }
+    .ray.seven {
+        transform: rotate(270deg) translateX(14px);
+    }
+    .ray.eight {
+        transform: rotate(315deg) translateX(14px);
+    }
+    &.light .ray {
+        transform: scaleX(0.01);
+        opacity: 0;
+    }
+}
