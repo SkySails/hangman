@@ -1,6 +1,6 @@
 # u03-hangman
 
-This repository houses a proposed solution to the `u03-hangman` assignment. This project utilizes [Web Components](https://developer.mozilla.org/en-US/docs/Web/Web_Components) and migh not work on mobile phones (yet).
+This repository houses a proposed solution to the `u03-hangman` assignment. This project utilizes [Web Components](https://developer.mozilla.org/en-US/docs/Web/Web_Components) and might not work on mobile phones (yet). It is, however, currently a fully working solution on desktop.
 
 ## Demo
 
