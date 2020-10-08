@@ -13,5 +13,6 @@ To run this project, simply clone it to a local folder and open it using a simpl
 Example: (http-server)
 
 ```bash
+$ git clone https://github.com/SkySails/hangman.git
 $ npx http-server .
 ```
