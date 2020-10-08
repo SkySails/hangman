@@ -4,7 +4,7 @@ This repository houses a proposed solution to the `u03-hangman` assignment. This
 
 ## Demo
 
-This repo is published using GitHub pages!
+This repo is published using GitHub pages! Please visit the [online version](https://skysails.github.io/hangman/) for a demo of the project.
 
 ## Getting started
 
