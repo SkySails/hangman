@@ -3,206 +3,202 @@ HangmanGame = [];
 
 // Message to everyone who likes to cheat using the dev-console
 console.log(
-    "%c Well hello there! If you came here looking for the current word, you came here to cheat.",
-    "font-size: 1.5em; font-weight: bold; padding: 20px; text-align:center;"
+  "%c Well hello there! If you came here looking for the current word, you came here to cheat.",
+  "font-size: 1.5em; font-weight: bold; padding: 20px; text-align:center;"
 );
 
 const wordlist = [
-    "agile",
-    "bootstrap",
-    "browser",
-    "bug",
-    "CSS",
-    "frontend",
-    "backend",
-    "fullstack",
-    "GitHub",
-    "HTML",
-    "JavaScript",
-    "cookies",
-    "favicon",
-    "framework",
-    "navigation",
+  "agile",
+  "bootstrap",
+  "browser",
+  "bug",
+  "CSS",
+  "frontend",
+  "backend",
+  "fullstack",
+  "GitHub",
+  "HTML",
+  "JavaScript",
+  "cookies",
+  "favicon",
+  "framework",
+  "navigation",
 ];
 
 function pickRandomWord() {
-    return wordlist[Math.floor(Math.random() * wordlist.length - 1) + 1];
+  return wordlist[Math.floor(Math.random() * wordlist.length - 1) + 1];
 }
 
 function stringToHTML(str) {
-    doc = Parser.parseFromString(str, "text/html");
-    return doc.body.firstChild;
+  doc = Parser.parseFromString(str, "text/html");
+  return doc.body.firstChild;
 }
 
 function setCharAt(str, index, chr) {
-    if (index > str.length - 1) return str;
-    return str.substring(0, index) + chr + str.substring(index + 1);
+  if (index > str.length - 1) return str;
+  return str.substring(0, index) + chr + str.substring(index + 1);
 }
 
 function revealLetter(letter, word, renderedWord) {
-    let indexes = [];
-    word.split("").forEach(
-        (l, index) => l.toLowerCase() === letter && indexes.push(index)
-    );
-    indexes.forEach(
-        (i) => (renderedWord = setCharAt(renderedWord, i, word.charAt(i)))
-    );
-    return renderedWord;
+  let indexes = [];
+  word
+    .split("")
+    .forEach((l, index) => l.toLowerCase() === letter && indexes.push(index));
+  indexes.forEach(
+    (i) => (renderedWord = setCharAt(renderedWord, i, word.charAt(i)))
+  );
+  return renderedWord;
 }
 
 function renderWinner() {
-    startConfetti();
-    var main = document.querySelector("main");
-    main.style.display = "none";
-    let winc = document.createElement("div");
-    winc.className = "win-wrapper";
-    winc.innerHTML = `
+  startConfetti();
+  var main = document.querySelector("main");
+  main.style.display = "none";
+  let winc = document.createElement("div");
+  winc.className = "win-wrapper";
+  winc.innerHTML = `
             <span class='win'>You won!</span>
             <button class='next-game'>Play again</button>
     `;
-    document.body.insertBefore(winc, document.body.firstChild);
-    winc.querySelector("button").onclick = (e) => {
-        stopConfetti();
-        main.style.display = "flex";
-        e.target.parentElement.remove();
-        HangmanGame.forEach(({ component, reset }) => {
-            reset();
-        });
-    };
+  document.body.insertBefore(winc, document.body.firstChild);
+  winc.querySelector("button").onclick = (e) => {
+    stopConfetti();
+    main.style.display = "flex";
+    e.target.parentElement.remove();
+    HangmanGame.forEach(({ component, reset }) => {
+      reset();
+    });
+  };
 }
 
 function renderLoser() {
-    var main = document.querySelector("main");
-    main.style.display = "none";
-    let winc = document.createElement("div");
-    winc.className = "win-wrapper"; /// TODO: Rename wrapper to better fit context
-    winc.innerHTML = `
+  var main = document.querySelector("main");
+  main.style.display = "none";
+  let winc = document.createElement("div");
+  winc.className = "win-wrapper"; /// TODO: Rename wrapper to better fit context
+  winc.innerHTML = `
             <span class='win'>You lost..</span>
             <button class='next-game'>Play again</button>
     `;
-    document.body.insertBefore(winc, document.body.firstChild);
-    winc.querySelector("button").onclick = (e) => {
-        main.style.display = "flex";
-        e.target.parentElement.remove();
-        HangmanGame.forEach(({ component, reset }) => {
-            reset();
-        });
-    };
+  document.body.insertBefore(winc, document.body.firstChild);
+  winc.querySelector("button").onclick = (e) => {
+    main.style.display = "flex";
+    e.target.parentElement.remove();
+    HangmanGame.forEach(({ component, reset }) => {
+      reset();
+    });
+  };
 }
 
 class HangmanKeyboard extends HTMLElement {
-    constructor() {
-        super();
+  constructor() {
+    super();
 
-        const keys = "abcdefghijklmnopqrstuvwxyz"
-            .split("")
-            .map((key, index) => {
-                let el = document.createElement("button");
-                el.innerHTML = key;
-                el.tabIndex = index + 2;
-                el.className = "hangman-key";
-                el.onclick = (e) => {
-                    document.querySelector("hangman-word")._tryLetter(key);
-                    el.style.opacity = 0.3;
-                    el.disabled = true;
-                };
+    const keys = "abcdefghijklmnopqrstuvwxyz".split("").map((key, index) => {
+      let el = document.createElement("button");
+      el.innerHTML = key;
+      el.tabIndex = index + 2;
+      el.className = "hangman-key";
+      el.onclick = (e) => {
+        document.querySelector("hangman-word")._tryLetter(key);
+        el.style.opacity = 0.3;
+        el.disabled = true;
+      };
 
-                return el;
-            });
+      return el;
+    });
 
-        keys.forEach((el) => this.appendChild(el));
-    }
+    keys.forEach((el) => this.appendChild(el));
 
-    connectedCallback() {
-        HangmanGame.push({ component: "Keyboard", reset: this._reset });
-        console.log(
-            "%c Hangman keyboard mounted successfully! ",
-            "background: #FEF6AE; color: black; padding: 10px; font-weight: bold; border-radius: 5px; font-size: 1.7em;"
-        );
-    }
-
-    _reset = () => {
-        Array.from(this.querySelectorAll("button")).forEach((el) => {
-            el.style.opacity = 1;
-            el.disabled = false;
-        });
+    this._reset = () => {
+      Array.from(this.querySelectorAll("button")).forEach((el) => {
+        el.style.opacity = 1;
+        el.disabled = false;
+      });
     };
+  }
+
+  connectedCallback() {
+    HangmanGame.push({ component: "Keyboard", reset: this._reset });
+    console.log(
+      "%c Hangman keyboard mounted successfully! ",
+      "background: #FEF6AE; color: black; padding: 10px; font-weight: bold; border-radius: 5px; font-size: 1.7em;"
+    );
+  }
 }
 
 customElements.define("hangman-keyboard", HangmanKeyboard);
 
 class HangmanWord extends HTMLElement {
-    #rendered_word;
+  constructor() {
+    super();
+    this._word = pickRandomWord();
+    this._letters = [];
+    console.log(this._word); // TODO: MOve logic into updateWord function
 
-    constructor() {
-        super();
-        this._word = pickRandomWord();
-        this._letters = [];
-        console.log(this._word); // TODO: MOve logic into updateWord function
+    this.rendered_word = "_".repeat(this._word.length);
 
-        this.#rendered_word = "_".repeat(this._word.length);
+    const word = document.createElement("span");
+    word.className = "hangman-word";
 
-        const word = document.createElement("span");
-        word.className = "hangman-word";
+    this.appendChild(word);
 
-        this.appendChild(word);
-    }
+    this._updateWord = () => {
+      console.log(this._word);
+      this.firstChild.innerHTML = this.rendered_word;
+      if (!this.rendered_word.includes("_")) renderWinner();
+    };
 
-    connectedCallback() {
-        HangmanGame.push({ component: "Word", reset: this._reset });
-        this.firstChild.innerHTML = this.#rendered_word;
-        console.log(
-            "%c Hangman word mounted successfully! ",
-            "background: #FFD5F7; color: black; padding: 10px; font-weight: bold; border-radius: 5px; font-size: 1.7em;"
+    this._tryLetter = (letter) => {
+      if (this._word.toLowerCase().includes(letter)) {
+        this.rendered_word = revealLetter(
+          letter,
+          this._word,
+          this.rendered_word
         );
-    }
-
-    static get observedAttributes() {
-        return ["word"];
-    }
-
-    attributeChangedCallback(attrName, oldValue, newValue) {
-        if (newValue !== oldValue) {
-            this._word = newValue;
-            this.#rendered_word = "_".repeat(newValue.length);
-        }
         this._updateWord();
+      } else {
+        document.querySelector("hangman-viewport")._paint();
+      }
+    };
+
+    this._reset = () => {
+      this.setAttribute("word", pickRandomWord());
+    };
+  }
+
+  connectedCallback() {
+    HangmanGame.push({ component: "Word", reset: this._reset });
+    this.firstChild.innerHTML = this.rendered_word;
+    console.log(
+      "%c Hangman word mounted successfully! ",
+      "background: #FFD5F7; color: black; padding: 10px; font-weight: bold; border-radius: 5px; font-size: 1.7em;"
+    );
+  }
+
+  static get observedAttributes() {
+    return ["word"];
+  }
+
+  attributeChangedCallback(attrName, oldValue, newValue) {
+    if (newValue !== oldValue) {
+      this._word = newValue;
+      this.rendered_word = "_".repeat(newValue.length);
     }
-
-    _updateWord = () => {
-        console.log(this._word);
-        this.firstChild.innerHTML = this.#rendered_word;
-        if (!this.#rendered_word.includes("_")) renderWinner();
-    };
-
-    _tryLetter = (letter) => {
-        if (this._word.toLowerCase().includes(letter)) {
-            this.#rendered_word = revealLetter(
-                letter,
-                this._word,
-                this.#rendered_word
-            );
-            this._updateWord();
-        } else {
-            document.querySelector("hangman-viewport")._paint();
-        }
-    };
-
-    _reset = () => {
-        this.setAttribute("word", pickRandomWord());
-    };
+    this._updateWord();
+  }
 }
 
 customElements.define("hangman-word", HangmanWord);
 
 class HangmanViewport extends HTMLElement {
-    constructor() {
-        super();
-        this._step = 0;
+  constructor() {
+    super();
+    this._step = 0;
 
-        const shadow = this.attachShadow({ mode: "open" });
+    const shadow = this.attachShadow({ mode: "open" });
 
-        const svg = stringToHTML(`
+    const svg = stringToHTML(`
         <svg
         xmlns="http://www.w3.org/2000/svg"
         width="100%"
@@ -476,60 +472,59 @@ class HangmanViewport extends HTMLElement {
         </g>
     </svg>
         `);
-        shadow.appendChild(svg);
-    }
+    shadow.appendChild(svg);
 
-    connectedCallback() {
-        HangmanGame.push({ component: "Viewport", reset: this._reset });
-        this._updateViewport();
-        console.log(
-            "%c Hangman viewport mounted successfully! ",
-            "background: #92CEF6; color: black; padding: 10px; font-weight: bold; border-radius: 5px; font-size: 1.7em;"
-        );
-    }
+    this._updateViewport = () => {
+      const shadow = this.shadowRoot;
 
-    static get observedAttributes() {
-        return ["step"];
-    }
+      let list = Array.from(shadow.querySelectorAll("[data-step]"));
 
-    attributeChangedCallback(attrName, oldValue, newValue) {
-        if (newValue !== oldValue) {
-            this._step = parseInt(newValue);
-        }
-        if (this._step === 13)
-            setTimeout(() => {
-                renderLoser();
-            }, 900);
-        this._updateViewport();
-    }
-
-    _updateViewport = () => {
-        const shadow = this.shadowRoot;
-
-        let list = Array.from(shadow.querySelectorAll("[data-step]"));
-
-        list.forEach((e) =>
-            e.dataset.step > this._step
-                ? (e.style.opacity = 0)
-                : (e.style.opacity = 1)
-        );
+      list.forEach((e) =>
+        e.dataset.step > this._step
+          ? (e.style.opacity = 0)
+          : (e.style.opacity = 1)
+      );
+    };
+    this._paint = () => {
+      this.setAttribute("step", this._step + 1);
     };
 
-    get step() {
-        return this._step;
-    }
-
-    set step(v) {
-        this.setAttribute("step", v);
-    }
-
-    _paint = () => {
-        this.setAttribute("step", this._step + 1);
+    this._reset = () => {
+      this.setAttribute("step", 0);
     };
+  }
 
-    _reset = () => {
-        this.setAttribute("step", 0);
-    };
+  connectedCallback() {
+    HangmanGame.push({ component: "Viewport", reset: this._reset });
+    this._updateViewport();
+    console.log(
+      "%c Hangman viewport mounted successfully! ",
+      "background: #92CEF6; color: black; padding: 10px; font-weight: bold; border-radius: 5px; font-size: 1.7em;"
+    );
+  }
+
+  static get observedAttributes() {
+    return ["step"];
+  }
+
+  attributeChangedCallback(attrName, oldValue, newValue) {
+    if (newValue !== oldValue) {
+      this._step = parseInt(newValue);
+    }
+    if (this._step === 13)
+      setTimeout(() => {
+        renderLoser();
+      }, 900);
+    this._updateViewport();
+  }
+
+  get step() {
+    return this._step;
+  }
+
+  set step(v) {
+    this.setAttribute("step", v);
+  }
 }
 
 customElements.define("hangman-viewport", HangmanViewport);
