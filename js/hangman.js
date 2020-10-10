@@ -97,7 +97,6 @@ class HangmanKeyboard extends HTMLElement {
     const keys = "abcdefghijklmnopqrstuvwxyz".split("").map((key, index) => {
       let el = document.createElement("button");
       el.innerHTML = key;
-      el.tabIndex = index + 2;
       el.className = "hangman-key";
       el.onclick = (e) => {
         document.querySelector("hangman-word")._tryLetter(key);
